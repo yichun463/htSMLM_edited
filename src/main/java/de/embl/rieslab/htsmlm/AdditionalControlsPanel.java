@@ -41,6 +41,8 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 	private JButton button_; 
 	private JTextFieldUpdater updater_;
 ///
+	
+	
 	//////// Properties
 	private static final String DEVICE_1 = "Two-state device 1";
 	private static final String DEVICE_2 = "Two-state device 2";
@@ -67,6 +69,7 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 	private static final String PARAM_ENABLE5 = "Enable two-state device 5";
 	private static final String PARAM_ENABLE6 = "Enable two-state device 6";
 	private static final int PARAM_NPOS = 6;
+	private final static String[] CAM_MODE = {"Max","On","Off"};
 	
 	public AdditionalControlsPanel(String label) {
 		super(label);
@@ -136,9 +139,14 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 		c.insets = new Insets(2,2,2,2);	
 		c.gridy = 7;
 		this.add(button_, c);
-
-	}
 		
+		combobox_ = new JComboBox<String>(CAM_MODE);
+		combobox_.setToolTipText("Change the cooler mode of your camera");
+		c.insets = new Insets(2,2,2,2);
+		c.gridy=8;
+		this.add(combobox_,c);
+	}
+	
 	@Override
 	protected void initializeProperties() {
 		addUIProperty(new TwoStateUIProperty(this, DEVICE_1,"Position property of the first two-state device.", new TwoStateFlag()));
@@ -207,6 +215,14 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 			} catch (UnknownUIPropertyException e) {
 				e.printStackTrace();
 			}
+		} else if(CAM_COOLER.equals(name)) {
+			try {
+				MultiStateUIProperty msprop = ((MultiStateUIProperty) getUIProperty(CAM_COOLER));
+				combobox_.setSelectedIndex(msprop.getStateIndex(newvalue));
+			} catch (UnknownUIPropertyException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 
@@ -309,7 +325,7 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 			} catch (UnknownUIParameterException e) {
 				e.printStackTrace();
 			}
-		}
+		} 
 	}
 
 	@Override
@@ -332,8 +348,9 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 		// Do nothing
 	}
 
+
 	@Override
 	protected void addComponentListeners() {
-		// Do nothing
+		SwingUIListeners.addActionListenerOnSelectedIndex(this,CAM_COOLER,combobox_);
 	}
 }
