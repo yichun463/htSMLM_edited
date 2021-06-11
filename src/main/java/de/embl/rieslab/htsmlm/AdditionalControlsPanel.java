@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -128,7 +129,11 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
             	String val = null;
 				try {
 					val = String.valueOf(getUIPropertyValue(CAM_T));
-					textfield_.setText(val);
+					
+					Double d= Double.parseDouble(val);
+					DecimalFormat df = new DecimalFormat("0.00");
+					String newval = df.format(d);
+					textfield_.setText(newval+"°C");
 				} catch (UnknownUIPropertyException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
